@@ -12,7 +12,7 @@ github_repo: "https://github.com/piaoling199/piaoling199.github.io.git" # you co
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
 sidebar-about-description: "IT Climber"
-sidebar-avatar: /img/about-BY-gentle.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-avatar: /img/IMG_20170108_171531.jpg   # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
