@@ -43,4 +43,4 @@ sudo sh ~/jetson_clocks.sh
 ***解决方案:*** 只要删掉384行的 **&>/dev/null** 就可以运行了。如果嫌麻烦可以下载改好的[文件
 (github)](https://github.com/piaoling199/TX2-notes/blob/master/sources/jetson_clocks.sh)或者[CSDN资源](https://download.csdn.net/download/weixin_43640369/10772540)。
 
-***参考文章：*** http://www.gpus.cn/qianduan/front/getNewsArc?articleid=133&from=timeline&isappinstalled=0( http://www.gpus.cn/qianduan/front/getNewsArc?articleid=133&from=timeline&isappinstalled=0)
+***参考文章：*** [http://www.gpus.cn/qianduan/front/getNewsArc?articleid=133&from=timeline&isappinstalled=0]( http://www.gpus.cn/qianduan/front/getNewsArc?articleid=133&from=timeline&isappinstalled=0)
