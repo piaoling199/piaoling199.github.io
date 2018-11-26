@@ -1,0 +1,44 @@
+---
+layout:     post
+title:      TX2 使用板载摄像头进行KITTI车辆检测
+subtitle:   TX2 新手的模式调整指南
+date:       2018-011-12
+author:     PLlove
+header-img: img/post-bg-ios9-web.jpg
+catalog: true
+tags:
+    - TX2
+    - python
+    - caffe
+    - 人工智能
+---
+
+# TX2 使用板载摄像头进行KITTI车辆检测
+
+## *KITTI数据集*
+
+KITTI数据集由德国卡尔斯鲁厄理工学院和丰田美国技术研究院联合创办，是目前国际上最大的自动驾驶场景下的计算机视觉算法评测数据集。有兴趣进一步了解的可以[阅读这篇博客](https://blog.csdn.net/solomon1558/article/details/70173223)（感觉蛮不错的，虽然我没看完），还可以进入[KITTI官网](http://www.cvlibs.net/datasets/kitti/index.php)自行探索。
+## *环境搭建*
+我也是参照网上的各种教程搭建的，而且时间有点久远了。如果有时间再补上环境搭建过程。
+
+ #### 环境(版本不同大部分情况不影响):
+ - cuda 9.0
+ - opencv 4.0-pre
+ - nvcaffe 0.15.14
+ - digits 6.1.1
+## *训练模型*
+按照DIGITS的[github官网目标检测教程](https://github.com/NVIDIA/DIGITS/blob/master/examples/object-detection/README.md)进行操作，教程难度不大，但有几个地方需要注意以下，如果不想自己训练的可以[下载我训练好的模型](https://github.com/piaoling199/TX2-detectnet-KITTI)，并直接`python detectnet-camera.py`运行。
+1. **预留硬盘空间(一个16GB的U盘+6GB硬盘空间  或者 19GB硬盘空间)**
+TX2开发板的存储空间不大，有很大的可能放不下训练所需的数据集，最好准备一个U盘或移动硬盘，将数据集下载到U盘中再导入到DIGITS的datasets里，即使使用了U盘或移动硬盘，TX2开发板还需要预留至少6GB的硬盘空间(因为数据集转成成lmdb格式后还会占用5.7GB的空间)。
+2. **足够的训练时间(两到三天)**
+由于数据集的数量大小和检测网络的深度，模型训练时会花费较长的时间，本人训练时花费了接近三天的时间，期间不能暂停，否则前功尽弃(是不是该提议DIGITS的大佬们研发一个暂停训练的功能了)。
+3. **按教程设置(来自血泪教训的提醒  大佬请无视)**
+本人在人工智能也是一个新司机，对硬件的认识只有大学的《计算机组成原理》，以为TX2开发板的性能肯定很牛啊。然后就自作聪明的把 Batch size 和 Batch Accumulation 都设置得比教程高，然后就……就在训练了一段时间后就卡死了。然后默默的搜了搜TX2开发板的性能，貌似TX2的特点是高集成度、功耗比啥的，一知半解，还是吃了没文化的亏(手动捂脸)。
+## *编写程序检测*
+程序的[源码在这里下载](https://github.com/piaoling199/TX2-detectnet-KITTI/blob/master/detectnet-camera.py)。从github上` git clone https://github.com/piaoling199/TX2-detectnet-KITTI.git`下载下来后只需要在目录中  `python detectnet-camera.py`就可以运行了，下面说几个程序中比较关键的地方(自己训练模型的需要认真看，并且源码中有许多注释，应该可以流畅阅读)。
+1. **打开板载摄像头**
+一般如果要使用python调用电脑自带的摄像头，可以使用cv2中的`cv2.VideoCapture(0)`就能打开摄像头了。但我在TX2开发板上使用这个函数的时候确总是报错，经过各种搜索，终于知道TX2开发板不支持这样调用板载摄像头。而是需要将0换成一串字符串参数才能调用`cap = cv2.VideoCapture("nvcamerasrc ! video/x-raw(memory:NVMM), width=(int)640, height=(int)480, format=(string)I420, framerate=(fraction)30/1 ! nvvidconv ! video/x-raw, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink")`，这些参数我只看懂了一部分，问度娘也没找到准确的答案，希望路过的大佬指教一下。
+2. **配置网络文件**
+使用训练好的模型，主要是**网络结构**与其中的**参数**。用DIGITS训练好模型后，我们所需的文件可以在DIGITS根目录下的`digits/jobs`目录下找到。(在jobs目录下有许多文件夹，包括所有的数据集和模型，各自使用创建时间+四位随机字符命名)在我们训练好的模型的对应文件夹下，将`deploy.prototxt`和**最新的caffemodel文件**拷贝到源码所在的目录下并覆盖，prototxt文件是模型的网络结构，caffemodel文件是网络中参数的权重或者说数值。
+3. **图像处理**
+TX2开发板的板载摄像头通过python打开后，使用`cv2.read()`函数读取的图片好像不是一般的图片格式，不能直接用于检测(可能是打开摄像头时传入的参数导致的)。所以我只好把读取到的图片先存存成文件，再从文件中读取，这是一个很傻的解决方案。希望路过的大佬指点迷津。
