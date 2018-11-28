@@ -8,6 +8,7 @@ header-img: img/post-bg-ios9-web.jpg
 catalog: true
 tags:
     - TX2
+    - caffe
 ---
 # Jetson TX2/TX1 在编译caffe-0.15时报错处理方案
 ## 报错内容
