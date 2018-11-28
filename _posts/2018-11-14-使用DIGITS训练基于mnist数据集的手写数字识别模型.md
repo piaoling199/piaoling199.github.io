@@ -8,7 +8,7 @@ header-img: img/post-bg-ios9-web.jpg
 catalog: true
 tags:
     - DIGITS
-    - 数据集
+    - mnist
     - 人工智能
 ---
 # 使用DIGITS训练基于mnist数据集的手写数字识别模型
