@@ -4,7 +4,7 @@ title:      Nvidia Jetson TX2 如何火力全开
 subtitle:   TX2 新手的模式调整指南
 date:       2018-11-08
 author:     PLlove
-header-img: img/post-bg-ios9-web.jpg
+header-img: img/post-bg-keybord.jpg
 catalog: true
 tags:
     - TX2
