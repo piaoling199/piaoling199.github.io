@@ -1,0 +1,24 @@
+---
+layout:     post
+title:      Nvidia Jetson TX2 GPU使用情况查看工具
+subtitle:   TX2 GPU使用情况查看工具
+date:       2019-02-15
+author:     PLlove
+header-img: img/post-bg-ios9-web.jpg
+catalog: true
+tags:
+    - TX2
+---
+# TX2 GPU使用情况查看工具
+
+这个工具是我在github上的找到的，在苦恼如何查看TX2开发板GPU情况的可以试用看看，依次执行以下代码行就行了。
+```sh
+git clone https://github.com/jetsonhacks/gpuGraphTX.git
+```
+```sh
+cd gpuGraphTX
+```
+```sh
+./gpuGraphTX.py
+```
+项目地址：https://github.com/jetsonhacks/gpuGraphTX.git
